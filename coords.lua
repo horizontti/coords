@@ -1,0 +1,53 @@
+function DrawTxt(text, x, y)
+	SetTextFont(0)
+	SetTextProportional(1)
+	SetTextScale(0.0, 0.4)
+	SetTextDropshadow(1, 0, 0, 0, 255)
+	SetTextEdge(1, 0, 0, 0, 255)
+	SetTextDropShadow()
+	SetTextOutline()
+	SetTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawText(x, y)
+end
+
+Citizen.CreateThread(function()
+    while true do
+		Citizen.Wait(0)
+		local entity = IsPedInAnyVehicle(PlayerPedId()) and GetVehiclePedIsIn(PlayerPedId(), false) or PlayerPedId()
+		x, y, z = table.unpack(GetEntityCoords(entity, true))
+		roundx = tonumber(string.format("%.2f", x))
+		roundy = tonumber(string.format("%.2f", y))
+		roundz = tonumber(string.format("%.2f", z))
+		DrawTxt("~y~X: ~g~ "..roundx, 0.32, 0.00)
+		DrawTxt("~y~Y: ~g~ "..roundy, 0.38, 0.00)
+		DrawTxt("~y~Z: ~g~ "..roundz, 0.445, 0.00)
+		heading = GetEntityHeading(entity)
+		roundh = tonumber(string.format("%.2f", heading))
+		DrawTxt("~y~H: ~g~ "..roundh, 0.50, 0.00)
+        local rx,ry,rz = table.unpack(GetEntityRotation(PlayerPedId(), 1))
+		DrawTxt("~y~RX: ~g~ "..tonumber(string.format("%.2f", rx)), 0.38, 0.03)
+		DrawTxt("~y~RY: ~g~ "..tonumber(string.format("%.2f", ry)), 0.44, 0.03)
+		DrawTxt("~y~RZ: ~g~ "..tonumber(string.format("%.2f", rz)), 0.495, 0.03)
+		speed = GetEntitySpeed(PlayerPedId())
+		rounds = tonumber(string.format("%.2f", speed))
+		DrawTxt("~y~NOPEUS: ~g~"..rounds, 0.40, 0.92)
+		health = GetEntityHealth(PlayerPedId())
+		DrawTxt("~y~HELA: ~g~"..health, 0.40, 0.95)
+		camRotX = GetGameplayCamRot().x
+		DrawTxt("~y~CR X: ~g~"..tonumber(string.format("%.2f", camRotX)), 0.36, 0.88)
+		camRotY = GetGameplayCamRot().y
+		DrawTxt("~y~CR Y: ~g~"..tonumber(string.format("%.2f", camRotY)), 0.44, 0.88)
+		camRotZ = GetGameplayCamRot().z
+		DrawTxt("~y~CR Z: ~g~"..tonumber(string.format("%.2f", camRotZ)), 0.51, 0.88)
+		veheng = GetVehicleEngineHealth(GetVehiclePedIsUsing(PlayerPedId()))
+		vehbody = GetVehicleBodyHealth(GetVehiclePedIsUsing(PlayerPedId()))
+		if IsPedInAnyVehicle(PlayerPedId(), 1) then
+			vehenground = tonumber(string.format("%.2f", veheng))
+			vehbodround = tonumber(string.format("%.2f", vehbody))
+			DrawTxt("~y~MOOTTORI: ~g~"..vehenground, 0.015, 0.76)
+			DrawTxt("~y~KORI: ~g~"..vehbodround, 0.015, 0.73)
+			DrawTxt("~y~VOIMANLÄHDE: ~g~"..tonumber(string.format("%.2f", GetVehicleFuelLevel(GetVehiclePedIsUsing(PlayerPedId())))), 0.015, 0.70)
+		end
+    end
+end)
